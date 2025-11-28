@@ -1,6 +1,15 @@
 import { CourseViewer } from "./course-viewer";
 
-export const runtime = "edge";
+// Generate static params for demo course IDs
+export function generateStaticParams() {
+  return [
+    { courseId: 'fundamentals' },
+    { courseId: 'advanced' },
+    { courseId: 'hospitality' },
+    { courseId: '1' },
+    { courseId: '2' },
+  ];
+}
 
 interface PageProps {
   params: Promise<{ courseId: string }>;
