@@ -1,0 +1,10 @@
+#:schema node_modules/wrangler/config-schema.json
+name = "guardian-elite"
+compatibility_date = "2024-11-01"
+compatibility_flags = ["nodejs_compat"]
+pages_build_output_dir = ".open-next"
+
+# Uncomment and update for custom domain
+# routes = [
+#   { pattern = "guardian-elite.com", custom_domain = true }
+# ]
