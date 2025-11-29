@@ -4,27 +4,42 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { Shield, Mail, Lock, Eye, EyeOff, ArrowRight } from "lucide-react";
+import { Shield, Mail, Lock, Eye, EyeOff, ArrowRight, Sparkles } from "lucide-react";
+
+// Shared demo credentials
+const DEMO_EMAIL = "demo@guardian.com";
+const DEMO_PASSWORD = "demo2024";
 
 export default function LoginPage() {
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
   const [formData, setFormData] = useState({
     email: "",
     password: "",
     remember: false,
   });
 
+  const handleDemoLogin = () => {
+    setFormData({ ...formData, email: DEMO_EMAIL, password: DEMO_PASSWORD });
+    setError("");
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
+    setError("");
 
-    // Simulate login - in production, this would call an auth API
+    // Validate demo credentials
     await new Promise((resolve) => setTimeout(resolve, 1000));
 
-    // Redirect to dashboard
-    router.push("/dashboard");
+    if (formData.email === DEMO_EMAIL && formData.password === DEMO_PASSWORD) {
+      router.push("/dashboard");
+    } else {
+      setError("Invalid credentials. Use demo@guardian.com / demo2024");
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -51,8 +66,35 @@ export default function LoginPage() {
             Sign in to continue your training journey
           </p>
 
+          {/* Demo Credentials Box */}
+          <div className="mt-6 p-4 bg-[#c9a227]/10 border border-[#c9a227]/30 rounded-xl">
+            <div className="flex items-center justify-between mb-2">
+              <div className="flex items-center gap-2">
+                <Sparkles className="h-4 w-4 text-[#c9a227]" />
+                <span className="text-sm font-semibold text-[#1a1a2e]">Demo Access</span>
+              </div>
+              <button
+                type="button"
+                onClick={handleDemoLogin}
+                className="text-xs bg-[#c9a227] text-[#1a1a2e] px-3 py-1 rounded-full hover:bg-[#e4c865] transition-colors font-medium"
+              >
+                Fill Credentials
+              </button>
+            </div>
+            <div className="text-xs text-gray-600 space-y-1">
+              <p><span className="font-medium">Email:</span> demo@guardian.com</p>
+              <p><span className="font-medium">Password:</span> demo2024</p>
+            </div>
+          </div>
+
+          {error && (
+            <div className="mt-4 p-3 bg-red-50 border border-red-200 rounded-lg text-sm text-red-700">
+              {error}
+            </div>
+          )}
+
           {/* Form */}
-          <form onSubmit={handleSubmit} className="mt-8 space-y-6">
+          <form onSubmit={handleSubmit} className="mt-6 space-y-6">
             {/* Email */}
             <div>
               <label
@@ -165,15 +207,18 @@ export default function LoginPage() {
             </Button>
           </Link>
 
-          {/* Demo Access */}
+          {/* Quick Demo Access */}
           <div className="mt-6 p-4 bg-gray-50 rounded-xl text-center">
             <p className="text-sm text-gray-600">
               Want to explore first?{" "}
               <button
-                onClick={() => router.push("/dashboard")}
+                onClick={() => {
+                  setFormData({ email: DEMO_EMAIL, password: DEMO_PASSWORD, remember: false });
+                  setTimeout(() => router.push("/dashboard"), 500);
+                }}
                 className="text-[#c9a227] font-medium hover:underline"
               >
-                Try our demo
+                Quick demo access
               </button>
             </p>
           </div>
